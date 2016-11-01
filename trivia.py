@@ -2,6 +2,7 @@
 
 import json
 import random
+import sys
 from trivia_parse import *
 
 trivia = {}
@@ -14,13 +15,16 @@ def next_question(trivia_list):
 def check_answer(question, guess, trivia_list):
     parsed_guess = parse(guess)
     parsed_answer = parse(trivia_list[question])
-    print(parsed_guess)
-    print(parsed_answer)
-    if weighted_score(parsed_guess, parsed_answer) >= 0.80:
+    if sys.argv[1] == '-d':
+        print(parsed_guess)
+        print(parsed_answer)
+    if weighted_score(parsed_guess, parsed_answer) >= score_threshold:
         return True
     else:
         return False
     #return parsed_guess == parsed_answer
+
+score_threshold = 0.80
 
 score = 0
 while True:

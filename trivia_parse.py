@@ -1,7 +1,7 @@
 # todo: switch between words and numbers i.e 'zero' -> '0'
-#       recognize between word orders i.e 'john and paul' vs 'paul and john'
 #       fix parse_parens
 #       adjust scoring system i.e. ('carbon dioxide' passes as 'argon', 'morphine' as 'heroin')
+#       figure out how to parse 'or', questions with multiple correct answers
 
 parsed = [
     '/',
@@ -43,6 +43,7 @@ parsed = [
     ' around ',
     ' among ']
 
+
 def contains_numbers(string):
     return any(char.isdigit() for char in string)
 
@@ -56,19 +57,21 @@ def parse(string):
     #remove excess whitespace
     string = string.strip()
     string = " ".join(string.split())    
-    
+ 
     #check if string is made up entirely of numbers
     if string.isdigit():
         return string
 
-    #checks string for items on parsed list and removes them
-    string = remove_parseable(string)
-    
+    #checks string for parentheses and removes them    
     if string.find('(') != -1:
         string = remove_parens(string)
-    
-    #removes all whitespace
-    string = string.replace(" ", "")
+
+    #checks string for items on parsed list and removes them
+    string = remove_parseable(string)
+
+    #splits string into list, sorts alphabetically, rejoins as string
+    lstring = sorted(string.split())
+    string = ''.join(lstring)    
 
     #returns fully parsed string
     return string
@@ -87,28 +90,7 @@ def remove_parens(string):
     end = string.find(')')
     return string[:start]+string[end+1:]
 
-#score method 1
-def score_guess1(guess, answer):
-    score = 0
-    answer_list = list(answer)
-    guess_list = list(guess)
-    for i in answer_list:
-        for j in guess_list:
-            if i == j:
-                score += 1
-                print(i, j, score)
-                break
-    return score
-
-def score_guess2(guess, answer):
-    score = 0
-    for i in range(0, len(answer)):
-        for j in range(len(guess)):
-            if answer[i] == guess[j]:
-                score += 1
-                print(answer[i], guess[j], score)
-                break
-
+## Scoring ##
 def lower_limit(i):
     return min(abs(i-2), abs(i-1), abs(i))
 

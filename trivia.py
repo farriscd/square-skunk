@@ -15,7 +15,7 @@ def next_question(trivia_list):
 def check_answer(question, guess, trivia_list):
     parsed_guess = parse(guess)
     parsed_answer = parse(trivia_list[question])
-    if sys.argv[1] == '-d':
+    if sys.argv[-1] == '-d':
         print(parsed_guess)
         print(parsed_answer)
     if weighted_score(parsed_guess, parsed_answer) >= score_threshold:
